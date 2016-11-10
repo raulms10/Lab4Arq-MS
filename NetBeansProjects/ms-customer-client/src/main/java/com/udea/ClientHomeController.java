@@ -5,9 +5,10 @@
  */
 package com.udea;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import java.util.HashMap;
 import java.util.Map;
-import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,26 +18,43 @@ import org.springframework.web.bind.annotation.RequestMapping;
  *
  * @author estudiantelis
  */
+
 @Controller
 public class ClientHomeController {
+    
     @RequestMapping("/")
     public String home(){
         return "index";
     }
     
+    @Autowired
+    ClientService helloWorldService;
+    
     @RequestMapping("/customer")
     public String goHome(){
-        return "greeting";
+        return "index";
     }
     
     @RequestMapping("/customer/{id}")
+    @HystrixCommand(fallbackMethod = "greetingDefault")
     public String greeting(Model model, @PathVariable("id") long id){
-        ClientService helloWorldService = new ClientService("http://localhost:2222");
+        helloWorldService = MsCustomerClientApplication.clientService();
         Customer greeting = helloWorldService.greeting(id);
         Map<String,Object> params = new HashMap<>();
         params.put("email",greeting.getEmail());
         params.put("name", greeting.getName());
+        System.out.println("name: " + greeting.getName());
         System.out.println("email: " + greeting.getEmail());
+        model.addAllAttributes(params);
+        return "greeting";
+    }
+    public String greetingDefault(Model model, @PathVariable("id") long id){
+        Customer greeting = helloWorldService.greetingDefault();
+        Map<String,Object> params = new HashMap<>();
+        params.put("email",greeting.getEmail());
+        params.put("name", greeting.getName());
+        System.out.println("name2: " + greeting.getName());
+        System.out.println("email2: " + greeting.getEmail());
         model.addAllAttributes(params);
         return "greeting";
     }

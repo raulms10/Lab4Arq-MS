@@ -16,11 +16,13 @@ import org.springframework.web.client.RestTemplate;
 @EnableHystrixDashboard
 @ComponentScan(useDefaultFilters=false) //Desactive el escaner de componente
 public class MsCustomerClientApplication {
-    private static final String SERVICE_URL = "http://MICROSERVICE-GREETING";
-	public static void main(String[] args) {
-		SpringApplication.run(MsCustomerClientApplication.class, args);
-                System.out.println("Inicia");
-	}
+    private static final String SERVICE_URL = "http://localhost:2222";
+    
+    public static void main(String[] args) {
+            SpringApplication.run(MsCustomerClientApplication.class, args);
+            System.out.println("Inicia");
+    }
+    
     @LoadBalanced
     @Bean
     public static RestTemplate restTemplate(){
@@ -28,7 +30,7 @@ public class MsCustomerClientApplication {
     }
     
     @Bean
-    public ClientService clientService(){
+    public static ClientService clientService(){
         return new ClientService(SERVICE_URL);
     }
     
