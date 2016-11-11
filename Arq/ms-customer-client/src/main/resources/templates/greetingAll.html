@@ -1,0 +1,26 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head><title>Prueba Greetings</title></head>
+
+<body>
+	<h1>Microservice Greeting Client</h1>
+        
+        <h2 class="title" th:text="${name0}">Nombre</h2>
+        <h2 class="title" th:text='${email0}'>Nombre</h2>
+        
+	<script language="javascript" type="text/javascript">
+            var resultados = "";
+            var fin = 0;
+            for (var i=0; i===fin; i++) {
+                var e = "email"+i;
+                resultados += "<h2 class='title' th:text='${e}'>Nombre</h2>";
+            }
+    
+            document.write(resultados);
+        </script>
+
+	<div style="height: 2cm">&nbsp;</div>
+
+</body>
+</html>
