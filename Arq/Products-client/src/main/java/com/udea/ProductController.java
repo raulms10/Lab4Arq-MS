@@ -5,7 +5,6 @@
  */
 package com.udea;
 
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,41 +17,32 @@ import org.springframework.web.bind.annotation.RequestMapping;
  *
  * @author estudiantelis
  */
-
 @Controller
-public class ClientHomeController {
-    
+public class ProductController {
+  
     @RequestMapping("/")
     public String home(){
         return "index";
-    }
+    }   
     
     @Autowired
-    ClientService helloWorldService;
+    ProductService helloWorldService;
     
-    @RequestMapping("/customer")
+    @RequestMapping("/product")
     public String goHome(){
         return "index";
     }
     
-    @RequestMapping("/customer/{id}")
-    @HystrixCommand(fallbackMethod = "greetingDefault")
+    @RequestMapping("/product/{id}")
     public String greeting(Model model, @PathVariable("id") long id){
-        helloWorldService = MsCustomerClientApplication.clientService();
-        Customer greeting = helloWorldService.greeting(id);
+        helloWorldService = ProductsClientApplication.productService();
+        Product greeting = helloWorldService.greeting(id);
         Map<String,Object> params = new HashMap<>();
-        params.put("email",greeting.getEmail());
-        params.put("name", greeting.getName());
+        params.put("name",greeting.getName());
+        params.put("description", greeting.getDescription());
+        params.put("amount",greeting.getAmount());
+        params.put("pu",greeting.getPu());
         model.addAllAttributes(params);
         return "greeting";
     }
-    public String greetingDefault(Model model, @PathVariable("id") long id){
-        Customer greeting = helloWorldService.greetingDefault();
-        Map<String,Object> params = new HashMap<>();
-        params.put("email",greeting.getEmail());
-        params.put("name", greeting.getName());
-        model.addAllAttributes(params);
-        return "greeting";
-    }
-   
 }

@@ -17,6 +17,9 @@ import org.springframework.web.client.RestTemplate;
  */
 @Service
 public class ClientService {
+    @Autowired
+    protected RestTemplate restTemplate ;
+    protected String serviceUrl;
     
     public ClientService(String serviceUrl){
         this.serviceUrl = serviceUrl.startsWith("http") ? serviceUrl: "http//" + serviceUrl;
@@ -28,16 +31,9 @@ public class ClientService {
     }
     
     public Customer greetingDefault() {
-        return new Customer(14, "n14","e14");
+        return new Customer(0, "Connection error","Connection error");
     }
     
-    public List<Customer> greetingAll(){
-        restTemplate = MsCustomerClientApplication.restTemplate();
-        Customer [] c = restTemplate.getForObject(serviceUrl + "/customer", Customer[].class);
-        return Arrays.asList(c);
-    }
+   
     
-    @Autowired
-    protected RestTemplate restTemplate ;
-    protected String serviceUrl;
 }
