@@ -37,6 +37,7 @@ public class ProductRest {
     }
     
     @GET
+    @Path("/product")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Product> getProducts(){
         return Products;
